@@ -18,7 +18,14 @@ class Home extends StatelessWidget {
             onPressed: () async {
               await _authService.signOut();
             },
-          )
+          ),
+          IconButton(
+            tooltip: 'Setting',
+            icon: Icon(Icons.settings),
+            onPressed: () async {
+              await _authService.signOut();
+            },
+          ),
         ],
       ),
     );
