@@ -9,8 +9,6 @@ Follow the Google Doc instructions to setup your own firebase to have full acces
 
 # Simple UIs
 
-
-
 <img src="screenshots/image1.png"/>
 
 <img src="screenshots/image2.png"/>
