@@ -1,35 +1,38 @@
-import 'package:brew_crew/screens/authenticate/register.dart';
+import 'package:brew_crew/screens/authenticate/sign_in.dart';
 import 'package:brew_crew/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class Signin extends StatefulWidget {
+class Register extends StatefulWidget {
   @override
-  _SigninState createState() => _SigninState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _SigninState extends State<Signin> {
+class _RegisterState extends State<Register> {
   final AuthService _authService = AuthService();
+  final _formKey = GlobalKey<FormState>();
   String email;
   String password;
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
-        title: Text('Sign in'),
+        title: Text('Register'),
         actions: <Widget>[
           FlatButton.icon(
             onPressed: () {
               Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => Register()));
+                  .push(MaterialPageRoute(builder: (context) => Signin()));
             },
             icon: Icon(
-              Icons.person_add,
+              Icons.person,
               color: Colors.white,
             ),
             label: Text(
-              'Register',
+              'Sign In',
               style: TextStyle(color: Colors.white),
             ),
           )
@@ -38,6 +41,7 @@ class _SigninState extends State<Signin> {
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
         child: Form(
+          key: _formKey,
           child: Column(
             children: <Widget>[
               SizedBox(
@@ -45,6 +49,10 @@ class _SigninState extends State<Signin> {
               ),
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  hintText: 'Email',
+                ),
+                validator: (value) => value.isEmpty ? 'Enter an email' : null,
                 onChanged: (value) {
                   email = value;
                 },
@@ -53,7 +61,14 @@ class _SigninState extends State<Signin> {
                 height: 20,
               ),
               TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Password',
+                ),
                 keyboardType: TextInputType.visiblePassword,
+                validator: (value) => value.length < 6
+                    ? 'Enter a password of 6 or more characters'
+                    : null,
+                style: TextStyle(),
                 onChanged: (value) {
                   password = value;
                 },
@@ -64,15 +79,27 @@ class _SigninState extends State<Signin> {
               ),
               RaisedButton(
                 onPressed: () async {
-                  print(email);
-                  print(password);
+                  if (_formKey.currentState.validate()) {
+                    dynamic user = await _authService.register(email, password);
+                    if (user is PlatformException) {
+                      // _showSnackBar(context, user.message);
+                      print(user.message);
+                    }
+                  }
                 },
-                child: Text('Sign in'),
+                child: Text('Register'),
               )
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _showSnackBar(BuildContext context, String content) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text(content),
+      duration: Duration(milliseconds: 2000),
+    ));
   }
 }
