@@ -1,5 +1,6 @@
 import 'package:brew_crew/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -40,6 +41,18 @@ class AuthService {
     } catch (e) {
       print(e.toString());
       return null;
+    }
+  }
+
+  Future signIn(String email, String password) async {
+    try {
+      AuthResult result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return _userFromFirebaseUer(result.user);
+    } catch (e) {
+      // throw e;
+      print(e.toString());
+      throw new Exception(e.toString());
     }
   }
 }
