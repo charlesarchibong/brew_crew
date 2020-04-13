@@ -1,16 +1,20 @@
 # brew_crew
 
-A new Flutter project.
 
-## Getting Started
+This is a mobile app that show the list of coffee and how it should be prepared, and this description is given from different users in realtime.
 
-This project is a starting point for a Flutter application.
+You're free to clone, star and download this repository.
 
-A few resources to get you started if this is your first Flutter project:
+Follow the Google Doc instructions to setup your own firebase to have full access to data. [Click here] (https://firebase.google.com/docs/projects/learn-more?authuser=0#firebase-cloud-relationship)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+# Simple UIs
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
+<img src="screenshots/image1.png"/>
+
+<img src="screenshots/image2.png"/>
+
+<img src="screenshots/image3.png"/>
+
+<img src="screenshots/image4.png"/>
