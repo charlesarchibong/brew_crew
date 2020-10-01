@@ -1,10 +1,11 @@
-import 'package:brew_crew/screens/authenticate/register.dart';
 import 'package:brew_crew/services/auth.dart';
 import 'package:brew_crew/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Signin extends StatefulWidget {
+  Signin({this.toggleView});
+  final Function toggleView;
   @override
   _SigninState createState() => _SigninState();
 }
@@ -28,8 +29,7 @@ class _SigninState extends State<Signin> {
               actions: <Widget>[
                 FlatButton.icon(
                   onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Register()));
+                    widget.toggleView();
                   },
                   icon: Icon(
                     Icons.person_add,

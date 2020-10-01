@@ -1,10 +1,12 @@
-import 'package:brew_crew/screens/authenticate/sign_in.dart';
 import 'package:brew_crew/services/auth.dart';
 import 'package:brew_crew/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Register extends StatefulWidget {
+  Register({this.toggleView});
+  final Function toggleView;
+
   @override
   _RegisterState createState() => _RegisterState();
 }
@@ -29,8 +31,7 @@ class _RegisterState extends State<Register> {
               actions: <Widget>[
                 FlatButton.icon(
                   onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Signin()));
+                    widget.toggleView();
                   },
                   icon: Icon(
                     Icons.person,
@@ -131,12 +132,5 @@ class _RegisterState extends State<Register> {
               ),
             ),
           );
-  }
-
-  void _showSnackBar(BuildContext context, String content) {
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text(content),
-      duration: Duration(milliseconds: 2000),
-    ));
   }
 }
