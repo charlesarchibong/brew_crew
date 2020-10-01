@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
         title: 'Brew Crew',
         theme: ThemeData(
           primarySwatch: Colors.brown,
+          accentColor: Colors.brown,
         ),
         home: Wrapper(),
       ),

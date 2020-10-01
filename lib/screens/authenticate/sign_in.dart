@@ -1,15 +1,18 @@
-import 'package:brew_crew/screens/authenticate/register.dart';
 import 'package:brew_crew/services/auth.dart';
+import 'package:brew_crew/shared/constants.dart';
 import 'package:brew_crew/shared/loading.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Signin extends StatefulWidget {
+class SignIn extends StatefulWidget {
+  SignIn({this.toggleView});
+  final Function toggleView;
   @override
-  _SigninState createState() => _SigninState();
+  _SignInState createState() => _SignInState();
 }
 
-class _SigninState extends State<Signin> {
+class _SignInState extends State<SignIn> {
   final AuthService _authService = AuthService();
   String email;
   String password;
@@ -22,14 +25,13 @@ class _SigninState extends State<Signin> {
         : Scaffold(
             backgroundColor: Colors.brown[100],
             appBar: AppBar(
-              backgroundColor: Colors.brown[400],
+              backgroundColor: Colors.brown[900],
               elevation: 0.0,
-              title: Text('Sign in'),
+              title: Text('Sign In'),
               actions: <Widget>[
                 FlatButton.icon(
                   onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Register()));
+                    widget.toggleView();
                   },
                   icon: Icon(
                     Icons.person_add,
@@ -42,91 +44,87 @@ class _SigninState extends State<Signin> {
                 )
               ],
             ),
-            body: Center(
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          hintText: 'Email',
-                          fillColor: Colors.white,
-                          filled: true,
-                          border: InputBorder.none,
+            body: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/table_bg.jpg'),
+                    fit: BoxFit.cover),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: textFieldDecorationE,
+                      onChanged: (value) {
+                        email = value;
+                      },
+                      validator: (value) =>
+                          value.isEmpty ? 'Enter an email' : null,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.visiblePassword,
+                      decoration: textFieldDecorationP,
+                      onChanged: (value) {
+                        password = value;
+                      },
+                      validator: (value) => value.length < 6
+                          ? 'Enter a password of 6 or more characters'
+                          : null,
+                      obscureText: true,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    error.isEmpty
+                        ? Text(
+                            '$error',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          )
+                        : Text(''),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    RaisedButton(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+                      color: Colors.brown[900],
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          setState(() {
+                            loading = true;
+                          });
+                          _authService.signIn(email, password).then((user) {
+                            if (user == null) {
+                              setState(() {
+                                loading = false;
+                                error = 'An error occurred, Please try again';
+                              });
+                            }
+                          }).catchError((error) {
+                            print(error.toString());
+                          });
+                        }
+                      },
+                      child: Text(
+                        'Sign In',
+                        style: TextStyle(
+                          color: Colors.white,
                         ),
-                        onChanged: (value) {
-                          email = value;
-                        },
-                        validator: (value) =>
-                            value.isEmpty ? 'Enter an email' : null,
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          fillColor: Colors.white,
-                          filled: true,
-                          border: InputBorder.none,
-                        ),
-                        onChanged: (value) {
-                          password = value;
-                        },
-                        validator: (value) => value.length < 6
-                            ? 'Enter a password of 6 or more characters'
-                            : null,
-                        obscureText: true,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      error.isEmpty
-                          ? Text(
-                              '$error',
-                              style: TextStyle(
-                                color: Colors.red,
-                              ),
-                            )
-                          : Text(''),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      RaisedButton(
-                        color: Colors.brown[400],
-                        onPressed: () async {
-                          if (_formKey.currentState.validate()) {
-                            setState(() {
-                              loading = true;
-                            });
-                            _authService.signIn(email, password).then((user) {
-                              if (user == null) {
-                                setState(() {
-                                  loading = false;
-                                  error = 'An error occurred, Please try again';
-                                });
-                              }
-                            }).catchError((error) {
-                              print(error.toString());
-                            });
-                          }
-                        },
-                        child: Text(
-                          'Sign in',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
               ),
             ),
