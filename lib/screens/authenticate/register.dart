@@ -1,4 +1,5 @@
 import 'package:brew_crew/services/auth.dart';
+import 'package:brew_crew/shared/constants.dart';
 import 'package:brew_crew/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,7 +26,7 @@ class _RegisterState extends State<Register> {
         : Scaffold(
             backgroundColor: Colors.brown[100],
             appBar: AppBar(
-              backgroundColor: Colors.brown[400],
+              backgroundColor: Colors.brown[900],
               elevation: 0.0,
               title: Text('Register'),
               actions: <Widget>[
@@ -44,90 +45,86 @@ class _RegisterState extends State<Register> {
                 )
               ],
             ),
-            body: Center(
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          hintText: 'Email',
-                          fillColor: Colors.white,
-                          filled: true,
-                          border: InputBorder.none,
-                        ),
-                        validator: (value) =>
-                            value.isEmpty ? 'Enter an email' : null,
-                        onChanged: (value) {
-                          email = value;
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          fillColor: Colors.white,
-                          filled: true,
-                          border: InputBorder.none,
-                        ),
-                        keyboardType: TextInputType.visiblePassword,
-                        validator: (value) => value.length < 6
-                            ? 'Enter a password of 6 or more characters'
-                            : null,
-                        style: TextStyle(),
-                        onChanged: (value) {
-                          password = value;
-                        },
-                        obscureText: true,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      error.isEmpty
-                          ? Text(
-                              '$error',
-                              style: TextStyle(
-                                color: Colors.red,
-                              ),
-                            )
-                          : Text(''),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      RaisedButton(
-                        color: Colors.brown[400],
-                        onPressed: () async {
-                          if (_formKey.currentState.validate()) {
+            body: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/table_bg.jpg'),
+                    fit: BoxFit.cover),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: textFieldDecorationE,
+                      validator: (value) =>
+                          value.isEmpty ? 'Enter an email' : null,
+                      onChanged: (value) {
+                        email = value;
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      decoration: textFieldDecorationP,
+                      keyboardType: TextInputType.visiblePassword,
+                      validator: (value) => value.length < 6
+                          ? 'Enter a password of 6 or more characters'
+                          : null,
+                      style: TextStyle(),
+                      onChanged: (value) {
+                        password = value;
+                      },
+                      obscureText: true,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    error.isEmpty
+                        ? Text(
+                            '$error',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          )
+                        : Text(''),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    RaisedButton(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+                      color: Colors.brown[900],
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          setState(() {
+                            loading = true;
+                          });
+                          dynamic user =
+                              await _authService.register(email, password);
+                          if (user == null) {
                             setState(() {
                               loading = true;
+                              error = 'An error occured, please try again!';
                             });
-                            dynamic user =
-                                await _authService.register(email, password);
-                            if (user == null) {
-                              setState(() {
-                                loading = true;
-                                error = 'An error occured, please try again!';
-                              });
-                            }
                           }
-                        },
-                        child: Text(
-                          'Register',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
+                        }
+                      },
+                      child: Text(
+                        'Register',
+                        style: TextStyle(
+                          color: Colors.white,
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
